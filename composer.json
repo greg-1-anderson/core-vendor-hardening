@@ -1,5 +1,5 @@
 {
-  "name": "drupal/core-vendor-hardening",
+  "name": "greg-1-anderson/core-vendor-hardening",
   "description": "Hardens the vendor directory for when it's in the docroot.",
   "keywords": ["drupal"],
   "homepage": "https://www.drupal.org/project/drupal",
