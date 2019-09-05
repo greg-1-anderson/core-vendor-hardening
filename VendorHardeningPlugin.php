@@ -2,15 +2,16 @@
 
 namespace Drupal\Composer\Plugin\VendorHardening;
 
+use Composer\Autoload\ClassLoader;
 use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Installer\PackageEvent;
+use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
+use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
 use Composer\Util\Filesystem;
-use Composer\Script\Event;
-use Composer\Installer\PackageEvents;
 use Drupal\Component\FileSecurity\FileSecurity;
 
 /**
@@ -240,6 +241,13 @@ class VendorHardeningPlugin implements PluginInterface, EventSubscriberInterface
    *   Path to vendor directory.
    */
   public function writeAccessRestrictionFiles($vendor_dir) {
+    // Make sure that we can autoload FileSecurity class.
+    $this->autoloadFileSecurity();
+    if (!class_exists(FileSecurity::class)) {
+      $this->io->writeError('<warning>Hardening vendor directory with .htaccess and web.config files.</warning>');
+      return;
+    }
+
     $this->io->writeError('<info>Hardening vendor directory with .htaccess and web.config files.</info>');
     // Prevent access to vendor directory on Apache servers.
     FileSecurity::writeHtaccess($vendor_dir, TRUE);
@@ -248,4 +256,24 @@ class VendorHardeningPlugin implements PluginInterface, EventSubscriberInterface
     FileSecurity::writeWebConfig($vendor_dir);
   }
 
+  /**
+   * Register a class loader for the FileSecurity class if it is not available.
+   */
+  protected function autoloadFileSecurity() {
+    if (class_exists(FileSecurity::class)) {
+      return;
+    }
+
+    // Find drupal/core
+    $drupalCorePackage = $this->composer->getRepositoryManager()->getLocalRepository()->findPackage('drupal/core', '*');
+    if (!$drupalCorePackage) {
+      return;
+    }
+    $installationManager = $this->composer->getInstallationManager();
+    $corePath = realpath($installationManager->getInstallPath($drupalCorePackage));
+
+    $classLoader = new ClassLoader();
+    $classLoader->addPsr4('Drupal\\Component\\FileSecurity\\', "$corePath/lib/Drupal/Component/FileSecurity");
+    $classLoader->register();
+  }
 }
