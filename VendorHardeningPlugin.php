@@ -273,8 +273,8 @@ class VendorHardeningPlugin implements PluginInterface, EventSubscriberInterface
 
     $fileSecurityPath = 'lib/Drupal/Component/FileSecurity/FileSecurity.php';
 
-    if (!is_dir("$corePath/$fileSecurityPath")) {
-      $this->io->writeError('<warning>Could not harden vendor directory with .htaccess and web.config files; drupal/core does not contain the file security component at $fileSecurityPath.</warning>');
+    if (!is_file("$corePath/$fileSecurityPath")) {
+      $this->io->writeError("<warning>Could not harden vendor directory with .htaccess and web.config files; drupal/core does not contain the file security component at $fileSecurityPath.</warning>");
       return;
     }
 
