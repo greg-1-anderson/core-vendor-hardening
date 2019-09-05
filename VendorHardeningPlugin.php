@@ -2,7 +2,6 @@
 
 namespace Drupal\Composer\Plugin\VendorHardening;
 
-use Composer\Autoload\ClassLoader;
 use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Installer\PackageEvent;
@@ -272,15 +271,13 @@ class VendorHardeningPlugin implements PluginInterface, EventSubscriberInterface
     $installationManager = $this->composer->getInstallationManager();
     $corePath = realpath($installationManager->getInstallPath($drupalCorePackage));
 
-    $fileSecurityPath = 'lib/Drupal/Component/FileSecurity';
+    $fileSecurityPath = 'lib/Drupal/Component/FileSecurity/FileSecurity.php';
 
     if (!is_dir("$corePath/$fileSecurityPath")) {
-      $this->io->writeError('<warning>Could not harden vendor directory with .htaccess and web.config files; drupal/core does contain the File Security component at $fileSecurityPath.</warning>');
+      $this->io->writeError('<warning>Could not harden vendor directory with .htaccess and web.config files; drupal/core does not contain the file security component at $fileSecurityPath.</warning>');
       return;
     }
 
-    $classLoader = new ClassLoader();
-    $classLoader->addPsr4('Drupal\\Component\\FileSecurity\\', "$corePath/$fileSecurityPath");
-    $classLoader->register();
+    require_once "$corePath/$fileSecurityPath";
   }
 }
