@@ -244,7 +244,6 @@ class VendorHardeningPlugin implements PluginInterface, EventSubscriberInterface
     // Make sure that we can autoload FileSecurity class.
     $this->autoloadFileSecurity();
     if (!class_exists(FileSecurity::class)) {
-      $this->io->writeError('<warning>Could not harden vendor directory with .htaccess and web.config files; drupal/core not found.</warning>');
       return;
     }
 
@@ -267,13 +266,21 @@ class VendorHardeningPlugin implements PluginInterface, EventSubscriberInterface
     // Find drupal/core
     $drupalCorePackage = $this->composer->getRepositoryManager()->getLocalRepository()->findPackage('drupal/core', '*');
     if (!$drupalCorePackage) {
+      $this->io->writeError('<warning>Could not harden vendor directory with .htaccess and web.config files; drupal/core not found.</warning>');
       return;
     }
     $installationManager = $this->composer->getInstallationManager();
     $corePath = realpath($installationManager->getInstallPath($drupalCorePackage));
 
+    $fileSecurityPath = 'lib/Drupal/Component/FileSecurity';
+
+    if (!is_dir("$corePath/$fileSecurityPath")) {
+      $this->io->writeError('<warning>Could not harden vendor directory with .htaccess and web.config files; drupal/core does contain the File Security component at $fileSecurityPath.</warning>');
+      return;
+    }
+
     $classLoader = new ClassLoader();
-    $classLoader->addPsr4('Drupal\\Component\\FileSecurity\\', "$corePath/lib/Drupal/Component/FileSecurity");
+    $classLoader->addPsr4('Drupal\\Component\\FileSecurity\\', "$corePath/$fileSecurityPath");
     $classLoader->register();
   }
 }
