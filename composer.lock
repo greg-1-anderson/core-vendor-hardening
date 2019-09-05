@@ -4,12 +4,49 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb5c2c00931aa882fc4984fb3e11852f",
-    "packages": [],
+    "content-hash": "49a227a4bab1eb0f0eff12b41b8f79fc",
+    "packages": [
+        {
+            "name": "drupal/core-file-security",
+            "version": "8.8.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/drupal/core-file-security.git",
+                "reference": "3d3fcb69e671eb491f4853b8ff203942c95a7e11"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/drupal/core-file-security/zipball/3d3fcb69e671eb491f4853b8ff203942c95a7e11",
+                "reference": "3d3fcb69e671eb491f4853b8ff203942c95a7e11",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Drupal\\Component\\FileSecurity\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "FileSecurity.",
+            "homepage": "https://www.drupal.org/project/drupal",
+            "keywords": [
+                "drupal"
+            ],
+            "time": "2019-08-22T02:49:54+00:00"
+        }
+    ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "drupal/core-file-security": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
