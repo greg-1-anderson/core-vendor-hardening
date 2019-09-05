@@ -244,7 +244,7 @@ class VendorHardeningPlugin implements PluginInterface, EventSubscriberInterface
     // Make sure that we can autoload FileSecurity class.
     $this->autoloadFileSecurity();
     if (!class_exists(FileSecurity::class)) {
-      $this->io->writeError('<warning>Hardening vendor directory with .htaccess and web.config files.</warning>');
+      $this->io->writeError('<warning>Could not harden vendor directory with .htaccess and web.config files; drupal/core not found.</warning>');
       return;
     }
 
