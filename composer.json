@@ -1,5 +1,5 @@
 {
-  "name": "greg-1-anderson/core-vendor-hardening",
+  "name": "drupal/core-vendor-hardening",
   "description": "Hardens the vendor directory for when it's in the docroot.",
   "keywords": ["drupal"],
   "homepage": "https://www.drupal.org/project/drupal",
@@ -15,7 +15,6 @@
   },
   "require": {
     "php": ">=7.0.8",
-    "composer-plugin-api": "^1.1",
-    "drupal/core-file-security": "8.8.x-dev"
+    "composer-plugin-api": "^1.1"
   }
 }
